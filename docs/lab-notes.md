@@ -49,3 +49,33 @@ Use one entry per meaningful setup session. Keep the log factual and concise. Do
 - Next action: collect live Parrot OS resource and virtualization information.
 
 **Status:** Documentation baseline drafted; host assessment pending.
+
+### 2026-10-29 — Host readiness assessment
+
+**Phase:** 0 — Readiness
+
+**Operating system:** Parrot Security 7.4 (echo)
+
+**Observed host resources**
+- CPU: Intel Core i5-4310U, 4 logical CPUs; virtualization support reports VT-x.
+- RAM: 11 GiB total; 8.6 GiB available at the time of measurement.
+- Swap: None configured.
+- Root filesystem: 348 GB available.
+- Docker Engine: 29.9.2.
+- Docker Compose: 2.26.1-4.
+- Docker service: Active.
+- Running containers: None.
+- vm.max_map_count: 1048576.
+
+**Assessment**
+
+The machine meets the published Wazuh Docker single-node requirements on paper, but CPU and memory are constrained. A native Docker deployment avoids the additional overhead of a separate Ubuntu VM.
+
+**Plan**
+- Inspect the official Wazuh Docker configuration before deployment.
+- Review port bindings and restrict management access.
+- Deploy only the core SIEM initially.
+- Monitor RAM, CPU, and container health during startup.
+- Add an endpoint only after the core services are healthy.
+
+**Status:** Host assessment recorded; deployment not yet started.
