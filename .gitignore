@@ -1,0 +1,35 @@
+# Secrets and local environment configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+secrets/
+credentials/
+*password*
+*token*
+
+# Local logs, captures, and generated telemetry
+*.log
+*.jsonl
+*.pcap
+*.pcapng
+eve.json
+logs/
+captures/
+raw-logs/
+
+# Local machine and tool state
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Local notes and unredacted evidence
+local-only/
+private-evidence/
