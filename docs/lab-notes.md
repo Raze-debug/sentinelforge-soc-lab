@@ -79,3 +79,30 @@ The machine meets the published Wazuh Docker single-node requirements on paper, 
 - Add an endpoint only after the core services are healthy.
 
 **Status:** Host assessment recorded; deployment not yet started.
+
+### 2026-10-29 — Wazuh core deployment verified
+
+**Phase:** 1 — Core SIEM
+
+- Deployed the official Wazuh Docker Compose single-node stack, version 4.14.9.
+- Wazuh manager, indexer and dashboard containers reported as running.
+- Indexer cluster reported GREEN.
+- Applied the updated indexer security configuration successfully.
+- Verified browser login to https://127.0.0.1:8443.
+- Dashboard is bound to loopback only.
+- Indexer and agent/API ports are not published to the host for external access.
+- Credential file is outside the repository and has permissions 600.
+- Certificate generation reported a missing `find` utility, but all nine required certificate/key files were verified as non-empty.
+
+**Resource observations**
+- RAM: 11 GiB total; approximately 6.4 GiB available after startup.
+- Swap: not configured.
+- CPU: four logical CPUs.
+
+**Not yet tested**
+- Windows endpoint enrollment.
+- Windows security-event collection.
+- File-integrity monitoring.
+- Suricata network alert ingestion.
+
+**Status:** Core stack running; dashboard login verified.
