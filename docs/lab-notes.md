@@ -106,3 +106,19 @@ The machine meets the published Wazuh Docker single-node requirements on paper, 
 - Suricata network alert ingestion.
 
 **Status:** Core stack running; dashboard login verified.
+
+### 2026-10-30 — Wazuh restart verification
+
+**Phase:** 1 — Core SIEM
+
+- Started Docker and Containerd successfully.
+- Restarted the Wazuh single-node stack using existing persistent volumes.
+- Confirmed manager, indexer and dashboard containers are running.
+- Queried the indexer cluster health API; status returned GREEN.
+- Confirmed essential manager services are running, including analysisd, remoted, logcollector, syscheckd and apid.
+- Verified dashboard access again at https://127.0.0.1:8443.
+- Available memory after startup: approximately 7.5 GiB.
+- Swap remains unconfigured.
+- Windows endpoint enrollment remains pending.
+
+**Status:** Wazuh restart and dashboard verification passed.

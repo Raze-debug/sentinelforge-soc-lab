@@ -79,7 +79,7 @@ This project is for defensive learning and authorized testing. Use sanitized scr
 | Public repository created | Complete |
 | Initial documentation | Complete |
 | Host capacity assessment | Complete |
-| Wazuh deployment | Core stack running; dashboard verified |
+| Wazuh deployment | Restart verified; indexer GREEN; dashboard accessible |
 | Windows agent enrollment | Not started |
 | Detection validation | Not started |
 
