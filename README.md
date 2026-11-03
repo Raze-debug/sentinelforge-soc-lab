@@ -79,10 +79,12 @@ This project is for defensive learning and authorized testing. Use sanitized scr
 | Public repository created | Complete |
 | Initial documentation | Complete |
 | Host capacity assessment | Complete |
-| Wazuh deployment | Restart verified; indexer GREEN; dashboard accessible |
-| Windows agent enrollment | Not started |
-| Detection validation | Not started |
+| Wazuh core deployment | Complete — indexer GREEN, manager and dashboard verified |
+| Windows agent installation and enrollment | Complete — SF-WIN11-01, ID 001, Active |
+| Windows event-ingestion validation | Pending |
+| File-integrity test validation | Pending |
+| Network detection with Suricata | Not started |
 
 ## Next step
 
-Follow [Phase 0 — Readiness](docs/roadmap.md#phase-0--readiness). Record live system resources before allocating VM memory or CPU.
+Continue Phase 2: verify that a benign Windows security event is received and searchable in the Wazuh dashboard.

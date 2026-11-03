@@ -7,40 +7,40 @@ Move forward only when the current phase meets its acceptance criteria. Do not m
 **Goal:** Determine whether the laptop can host planned components safely.
 
 Tasks:
-- [ ] Record Parrot OS version, kernel, CPU, RAM, free disk space, and virtualization support.
-- [ ] Confirm whether VMware is installed and identify its version if available.
-- [ ] Record whether Windows 11 is a physical endpoint or a VM.
-- [ ] Sketch the proposed network mode and identify which endpoints must communicate.
-- [ ] Check current official installation and resource requirements before deployment.
-- [ ] Choose VM resources based on live capacity, leaving room for the host.
+- [x] Record Parrot OS version, kernel, CPU, RAM, free disk space, and virtualization support.
+- [x] Confirm the hypervisor in use: VirtualBox.
+- [x] Record Windows 11 as a VirtualBox VM.
+- [x] Document NAT + Host-only networking and the Parrot/Windows lab connection.
+- [x] Check official Wazuh installation and resource requirements.
+- [x] Allocate 4 GiB RAM and 2 CPU cores to Windows; monitor host memory during combined operation.
 
 Acceptance criteria:
 - [ ] Resource output saved locally or summarized without unique identifiers.
-- [ ] Host/guest and network layout documented.
-- [ ] Deployment plan fits available capacity without starving the host.
+- [x] Host/guest and network layout documented.
+- [x] Core Wazuh + Windows Agent workload tested; memory headroom remains limited and is monitored.
 
 ## Phase 1 — Core SIEM
 
 **Goal:** Establish a functioning Wazuh all-in-one deployment, if resources permit.
 
 Tasks:
-- [ ] Review the official Wazuh quickstart and prerequisites.
-- [ ] Install on a supported Ubuntu Server environment.
-- [ ] Save generated credentials securely outside Git.
-- [ ] Confirm services are healthy and the dashboard is reachable from the intended management network.
+- [x] Review official Wazuh documentation and prerequisites.
+- [x] Deploy the official Wazuh 4.14.9 single-node Docker stack on the Parrot OS host.
+- [x] Save generated credentials securely outside Git.
+- [x] Confirm manager/indexer health and dashboard access; dashboard is bound to localhost.
 - [ ] Capture a sanitized verification screenshot.
 
 Acceptance criteria:
-- [ ] Dashboard login works.
-- [ ] Manager/indexer services are healthy according to official checks.
-- [ ] No credentials or unredacted private details are committed.
+- [x] Dashboard login works.
+- [x] Manager/indexer services are healthy according to official checks.
+- [x] No credentials or unredacted private details are committed.
 
 ## Phase 2 — Windows endpoint telemetry
 
 Tasks:
-- [ ] Install the supported Wazuh Agent package on Windows.
-- [ ] Enroll the endpoint using the current official procedure.
-- [ ] Verify the agent is active in the dashboard.
+- [x] Install the Wazuh 4.14.9 Windows Agent package.
+- [x] Enroll the endpoint using the Wazuh enrollment service.
+- [x] Verify the agent is Active in the manager and dashboard.
 - [ ] Generate a benign event and locate it in the SIEM.
 - [ ] Record timestamps, expected outcome, and observed result.
 
@@ -115,4 +115,4 @@ Acceptance criteria:
 
 ## Current milestone
 
-**Phase 0 — Readiness: not started.** Collect local host metrics before deployment.
+**Phase 2 — Windows endpoint telemetry: in progress.** The Windows 11 agent `SF-WIN11-01` (ID 001, Wazuh 4.14.9) is enrolled and Active. Next, verify a benign Windows security event in the Wazuh dashboard before marking this phase complete.

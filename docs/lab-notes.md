@@ -122,3 +122,38 @@ The machine meets the published Wazuh Docker single-node requirements on paper, 
 - Windows endpoint enrollment remains pending.
 
 **Status:** Wazuh restart and dashboard verification passed.
+
+
+### 2026-11-04 — Windows 11 endpoint enrollment verified
+
+**Phase:** 2 — Windows endpoint telemetry
+
+**Environment**
+- Endpoint: Windows 11 Home, VirtualBox VM.
+- Agent: Wazuh 4.14.9.
+- Agent name: SF-WIN11-01.
+- Agent ID: 001.
+- Parrot OS kernel: 7.1.13+parrot7-amd64.
+- Network: NAT + Host-only (`vboxnet0`).
+- Private lab addresses: Parrot `192.168.56.1`, Windows `192.168.56.101`.
+
+**Verified results**
+- Windows MSI digital signature verified as valid.
+- Agent installed successfully; MSI exit code 0.
+- Windows Wazuh service is Running and configured for Automatic startup.
+- Enrollment key received successfully.
+- TCP connectivity to manager ports 1514 and 1515 verified from Windows.
+- Windows agent connected to the manager over TCP 1514.
+- Manager reports SF-WIN11-01 (ID 001) as Active.
+- `agent_control -i 001` and `agent_control -lc` both confirmed Active.
+- Windows Security, System and Application event collection initialized.
+- Initial FIM scan and real-time FIM initialization reported by the agent.
+- Initial Windows SCA assessment completed.
+
+**Pending validation**
+- Find a benign Windows security event in the Wazuh dashboard.
+- Validate file creation, modification and deletion in a dedicated test directory.
+- Investigate the SCA integration checksum retry warning seen in the Windows agent log.
+- Confirm sustained endpoint connectivity over a longer observation period.
+
+**Status:** Agent enrollment and active connection verified; event-ingestion validation pending.
