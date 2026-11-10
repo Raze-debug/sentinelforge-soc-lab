@@ -15,7 +15,7 @@ Tasks:
 - [x] Allocate 4 GiB RAM and 2 CPU cores to Windows; monitor host memory during combined operation.
 
 Acceptance criteria:
-- [ ] Resource output saved locally or summarized without unique identifiers.
+- [x] Resource output saved locally or summarized without unique identifiers.
 - [x] Host/guest and network layout documented.
 - [x] Core Wazuh + Windows Agent workload tested; memory headroom remains limited and is monitored.
 
@@ -37,34 +37,44 @@ Acceptance criteria:
 
 ## Phase 2 — Windows endpoint telemetry
 
+**Goal:** Enroll a Windows endpoint and verify its telemetry reaches Wazuh.
+
 Tasks:
 - [x] Install the Wazuh 4.14.9 Windows Agent package.
 - [x] Enroll the endpoint using the Wazuh enrollment service.
 - [x] Verify the agent is Active in the manager and dashboard.
-- [ ] Generate a benign event and locate it in the SIEM.
-- [ ] Record timestamps, expected outcome, and observed result.
+- [x] Generate a benign Windows interactive logon and locate the resulting event in the SIEM.
+- [x] Record the observed Event ID, Wazuh rule, and result.
 
 Acceptance criteria:
-- [ ] Agent connection confirmed.
-- [ ] At least one expected endpoint event is visible and documented.
+- [x] Agent connection confirmed for SF-WIN11-01 (ID 001).
+- [x] Windows Security-channel events are visible in Wazuh.
+- [x] Interactive successful-logon Event ID 4624 was observed as Wazuh rule 60118, level 3.
 
 ## Phase 3 — File integrity and validation
 
+**Goal:** Verify real-time file-integrity detection on a dedicated Windows test directory.
+
 Tasks:
-- [ ] Configure monitoring for a dedicated test directory, for example `C:\SOC-Lab`.
-- [ ] Create, modify, and delete a harmless test file.
-- [ ] Confirm corresponding events are received.
-- [ ] Record configuration changes and restart/reload steps.
-- [ ] Do not monitor personal folders unnecessarily.
+- [x] Create C:\SentinelForge-FIM-Test and add it to the existing syscheck configuration with realtime="yes".
+- [x] Validate the Windows agent configuration as XML.
+- [x] Create a harmless test file and verify the corresponding alert.
+- [x] Modify the same test file and verify the corresponding alert.
+- [x] Delete the same test file and verify the corresponding alert.
+- [x] Record the rule IDs and observed outcomes in the detection-validation register.
 
 Acceptance criteria:
-- [ ] Test cases have documented expected and observed results.
-- [ ] Validation table distinguishes PASS, FAIL, and NOT TESTED.
+- [x] File creation detected: rule 554, level 5.
+- [x] File modification detected: rule 550, level 7.
+- [x] File deletion detected: rule 553, level 7.
+- [x] Tests used a dedicated folder and did not modify personal or Windows system files.
 
 ## Phase 4 — Network detection
 
+**Goal:** Add a network sensor and document the limits of its traffic visibility.
+
 Tasks:
-- [ ] Identify the network interface to monitor.
+- [ ] Identify the network interface to monitor and the traffic visible on it.
 - [ ] Install Suricata using the current supported package/docs.
 - [ ] Validate its configuration before starting capture.
 - [ ] Confirm service health and inspect EVE output.
@@ -115,4 +125,4 @@ Acceptance criteria:
 
 ## Current milestone
 
-**Phase 2 — Windows endpoint telemetry: in progress.** The Windows 11 agent `SF-WIN11-01` (ID 001, Wazuh 4.14.9) is enrolled and Active. Next, verify a benign Windows security event in the Wazuh dashboard before marking this phase complete.
+**Phase 4 — Network detection: next.** Wazuh 4.14.9 is deployed, Windows endpoint SF-WIN11-01 (ID 001) is Active, interactive authentication detection is validated, and file creation/modification/deletion detection passed in C:\SentinelForge-FIM-Test. Next, assess interface visibility and resource impact before deploying Suricata.

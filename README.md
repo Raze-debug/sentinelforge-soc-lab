@@ -1,11 +1,11 @@
 # SentinelForge — SOC Monitoring & Threat Investigation Lab
 
-**Status:** Planning and host assessment
-**Approach:** Established defensive tools, configuration, controlled validation, and documented investigations—not a large custom application.
+**Status:** Wazuh core and Windows endpoint deployed; Windows authentication and file-integrity detections validated.
+**Approach:** Established defensive tools, controlled validation, investigation workflows, and documented evidence—not a large custom application.
 
-SentinelForge is a hands-on SOC lab for practicing endpoint monitoring, SIEM triage, network alert analysis, and incident investigation. The goal is a reproducible, interview-ready portfolio with evidence for each implemented capability.
+SentinelForge is a hands-on SOC lab for practicing endpoint monitoring, SIEM triage, file-integrity monitoring, network alert analysis, and incident investigation. The goal is a reproducible, interview-ready portfolio with evidence for each implemented capability.
 
-> **Current status:** Repository initialized; lab components are not yet claimed to be installed, connected, or tested. Each milestone will be marked complete only after its checks succeed.
+> **Current status:** Wazuh 4.14.9 is deployed as a single-node Docker stack on the Parrot OS host. A Windows 11 VirtualBox endpoint is enrolled as SF-WIN11-01 (agent 001). Interactive Windows logon and all three tested file-integrity operations have produced matching Wazuh alerts. Network detection is the next implementation phase.
 
 ## Objectives
 
@@ -17,33 +17,34 @@ SentinelForge is a hands-on SOC lab for practicing endpoint monitoring, SIEM tri
 - Develop repeatable incident playbooks and detection-validation records.
 - Document architecture, configuration choices, troubleshooting, and sanitized evidence.
 
-## Planned tools
+## Implemented tools and planned additions
 
-| Capability | Candidate tool | Purpose |
+| Capability | Tool | Status / purpose |
 |---|---|---|
-| SIEM and endpoint monitoring | Wazuh | Central events, endpoint agent, rules, dashboards and file-integrity monitoring |
-| Windows endpoint | Windows 11 + Wazuh Agent | Endpoint telemetry |
-| Network intrusion detection | Suricata | Alerts on traffic visible to the configured sensor |
-| Asset discovery | NetAlertX (optional) | Discover devices visible to the lab network |
-| Dashboards | Wazuh dashboard first; Grafana optional later | Review patterns and communicate findings |
+| SIEM and endpoint monitoring | Wazuh 4.14.9 | Deployed; manager, indexer and dashboard verified |
+| Windows endpoint | Windows 11 + Wazuh Agent 4.14.9 | Enrolled; agent SF-WIN11-01 (001) Active |
+| Authentication detection | Wazuh Windows rules | Interactive successful-logon alerts validated |
+| File integrity monitoring | Wazuh Syscheck/FIM | Real-time monitoring and create/modify/delete tests passed |
+| Network intrusion detection | Suricata | Planned for Phase 4 |
+| Asset discovery | NetAlertX (optional) | Consider only after core network detection |
+| Additional dashboards | Grafana (optional) | Deferred until there is a clear use case |
 
-Tools will be introduced incrementally, depending on hardware resources and compatibility.
+## Current lab architecture
 
-## Planned architecture
+1. **Parrot OS host:** administration workstation and Docker host for the Wazuh single-node deployment.
+2. **Wazuh stack:** manager, indexer and dashboard using the official 4.14.9 Docker deployment.
+3. **Windows 11 endpoint:** VirtualBox VM with the Wazuh 4.14.9 agent.
+4. **Lab network:** Windows VM uses NAT and a host-only interface for controlled communication with the Parrot host.
+5. **Next component:** Suricata sensor, after its interface visibility and resource impact are assessed.
 
-1. **Parrot OS host:** administration workstation and possible Suricata sensor.
-2. **Ubuntu Server VM:** planned home for Wazuh, pending the resource check.
-3. **Windows 11 endpoint:** planned Wazuh Agent enrollment and controlled validation.
-4. **Optional network visibility and dashboards:** only after the core SIEM workflow is verified.
-
-Network layout and VM sizing will be documented after inspecting the actual environment. Management services must not be exposed directly to the public internet.
+Management services must not be exposed directly to the public internet. The Wazuh dashboard is bound to host loopback.
 
 ## Roadmap
 
-- [ ] **Phase 0 — Readiness:** CPU, RAM, disk, virtualization and network assessment.
-- [ ] **Phase 1 — Core SIEM:** Deploy Wazuh and verify service health.
-- [ ] **Phase 2 — Endpoint telemetry:** Enroll Windows and verify events arrive.
-- [ ] **Phase 3 — Detection validation:** Run controlled authentication and file-integrity tests.
+- [x] **Phase 0 — Readiness:** CPU, RAM, disk, virtualization and network assessment.
+- [x] **Phase 1 — Core SIEM:** Deploy Wazuh and verify service health.
+- [x] **Phase 2 — Endpoint telemetry:** Enroll Windows and verify security events arrive.
+- [x] **Phase 3 — Detection validation:** Validate interactive authentication and file creation, modification and deletion.
 - [ ] **Phase 4 — Network detection:** Add Suricata and validate authorized test alerts.
 - [ ] **Phase 5 — Asset context:** Create an asset register; consider discovery tooling.
 - [ ] **Phase 6 — Investigation workflows:** Cross-source triage, playbooks and detection coverage.
@@ -51,7 +52,7 @@ Network layout and VM sizing will be documented after inspecting the actual envi
 
 ## Documentation
 
-- [Architecture](docs/architecture.md) — planned components, data flows, and trust boundaries.
+- [Architecture](docs/architecture.md) — components, data flows, and trust boundaries.
 - [Roadmap](docs/roadmap.md) — phased work and acceptance criteria.
 - [Lab notes](docs/lab-notes.md) — commands, observations, errors, and fixes.
 - [Detection validation](docs/detection-validation.md) — expected versus observed outcomes.
@@ -76,15 +77,17 @@ This project is for defensive learning and authorized testing. Use sanitized scr
 
 | Milestone | Status |
 |---|---|
-| Public repository created | Complete |
-| Initial documentation | Complete |
+| Public repository and initial documentation | Complete |
 | Host capacity assessment | Complete |
-| Wazuh core deployment | Complete — indexer GREEN, manager and dashboard verified |
+| Wazuh core deployment | Complete — indexer GREEN; manager and dashboard verified |
 | Windows agent installation and enrollment | Complete — SF-WIN11-01, ID 001, Active |
-| Windows event-ingestion validation | Pending |
-| File-integrity test validation | Pending |
+| Windows Security-event ingestion | Complete — Security-channel events visible in Wazuh |
+| Interactive Windows authentication detection | Complete — Event ID 4624, logon type 2, rule 60118, level 3 |
+| File creation detection | Complete — rule 554, level 5 |
+| File modification detection | Complete — rule 550, level 7 |
+| File deletion detection | Complete — rule 553, level 7 |
 | Network detection with Suricata | Not started |
 
 ## Next step
 
-Continue Phase 2: verify that a benign Windows security event is received and searchable in the Wazuh dashboard.
+Begin Phase 4: assess the available network interfaces and choose a safe, useful Suricata sensor location. Document what traffic the sensor can and cannot see before validating alerts.
