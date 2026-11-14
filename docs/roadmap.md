@@ -28,7 +28,7 @@ Tasks:
 - [x] Deploy the official Wazuh 4.14.9 single-node Docker stack on the Parrot OS host.
 - [x] Save generated credentials securely outside Git.
 - [x] Confirm manager/indexer health and dashboard access; dashboard is bound to localhost.
-- [ ] Capture a sanitized verification screenshot.
+- [ ] Capture a sanitized core-deployment verification screenshot (reporting/evidence task).
 
 Acceptance criteria:
 - [x] Dashboard login works.
@@ -43,7 +43,7 @@ Tasks:
 - [x] Install the Wazuh 4.14.9 Windows Agent package.
 - [x] Enroll the endpoint using the Wazuh enrollment service.
 - [x] Verify the agent is Active in the manager and dashboard.
-- [x] Generate a benign Windows interactive logon and locate the resulting event in the SIEM.
+- [x] Generate a benign Windows interactive sign-in/unlock and locate the resulting event in the SIEM.
 - [x] Record the observed Event ID, Wazuh rule, and result.
 
 Acceptance criteria:
@@ -56,7 +56,7 @@ Acceptance criteria:
 **Goal:** Verify real-time file-integrity detection on a dedicated Windows test directory.
 
 Tasks:
-- [x] Create C:\SentinelForge-FIM-Test and add it to the existing syscheck configuration with realtime="yes".
+- [x] Create `C:\SentinelForge-FIM-Test` and add it to the existing syscheck configuration with `realtime="yes"`.
 - [x] Validate the Windows agent configuration as XML.
 - [x] Create a harmless test file and verify the corresponding alert.
 - [x] Modify the same test file and verify the corresponding alert.
@@ -74,55 +74,59 @@ Acceptance criteria:
 **Goal:** Add a network sensor and document the limits of its traffic visibility.
 
 Tasks:
-- [ ] Identify the network interface to monitor and the traffic visible on it.
-- [ ] Install Suricata using the current supported package/docs.
-- [ ] Validate its configuration before starting capture.
-- [ ] Confirm service health and inspect EVE output.
-- [ ] Generate only benign/authorized test traffic suitable for the enabled rules.
-- [ ] If forwarding logs to Wazuh, verify integration end to end.
+- [x] Identify the network interface to monitor and the traffic visible on it (`vboxnet0`, the VirtualBox host-only segment).
+- [x] Install Suricata 8.0.8 and `suricata-update`.
+- [x] Validate its configuration before starting capture.
+- [x] Confirm service health and inspect EVE output.
+- [x] Generate benign, authorized ICMP test traffic from Windows to the Parrot host.
+- [x] Forward EVE JSON to Wazuh through a read-only bind mount and JSON `localfile` collector.
+- [x] Verify the event end to end in Wazuh alerts and Threat Hunting.
 
 Acceptance criteria:
-- [ ] Sensor interface and visibility limitations are documented.
-- [ ] A supported test alert or event is observed and recorded.
-- [ ] No claim of full network visibility is made without evidence.
+- [x] Sensor interface and visibility limitations are documented.
+- [x] A supported test alert/event is observed and recorded.
+- [x] No claim of full network visibility is made without evidence.
+- [x] Wazuh rule 86601 generated four alerts for the controlled test; dashboard search returned four hits.
 
 ## Phase 5 — Asset context
 
 Tasks:
-- [ ] Populate the asset register with lab devices only.
-- [ ] Record purpose, responsible role, expected services, and relative criticality.
-- [ ] Optionally deploy NetAlertX if resources and network conditions justify it.
-- [ ] Compare discovery observations with the manually maintained register.
+- [x] Populate the asset register with the lab host, Windows endpoint, and logical Suricata sensor component.
+- [x] Record purpose, responsible role, expected services, and relative criticality.
+- [x] Defer optional NetAlertX; the lab remains a manual, scoped inventory.
+- [x] Document that no network-wide discovery or unknown-device classification is claimed.
 
 Acceptance criteria:
-- [ ] Known assets and criticality rationale are documented.
-- [ ] Unknown devices are treated as investigation leads, not automatically malicious.
+- [x] Known assets/components and lab-relative criticality rationale are recorded.
+- [x] Unknown devices are treated as investigation leads, not automatically malicious.
 
 ## Phase 6 — Incident investigation workflows
 
 Tasks:
-- [ ] Document triage workflow for repeated failed logins.
-- [ ] Document file-integrity change investigation.
-- [ ] Document suspicious network alert investigation.
-- [ ] Define how to correlate timestamps, host, user, source/destination, and evidence.
-- [ ] Include false-positive checks and evidence preservation.
+- [x] Document triage workflow for repeated failed logins.
+- [x] Document file-integrity change investigation.
+- [x] Document suspicious network alert investigation.
+- [x] Define how to correlate timestamps, host, user, source/destination, and evidence.
+- [x] Include false-positive checks and evidence preservation.
+- [x] Follow one controlled scenario from event to documented conclusion (benign ICMP alert case SF-CASE-001).
 
 Acceptance criteria:
-- [ ] Playbooks include scope, steps, evidence, decision points, escalation, and closure notes.
-- [ ] At least one controlled scenario is followed from event to documented conclusion.
+- [x] Playbooks include scope, steps, evidence, decision points, escalation, and closure notes.
+- [x] At least one controlled scenario is followed from event to documented conclusion.
 
 ## Phase 7 — Reporting and polish
 
 Tasks:
-- [ ] Add sanitized screenshots and short case-study write-ups.
-- [ ] Summarize coverage tested and limitations.
-- [ ] Optionally add Grafana only for a clear use case.
-- [ ] Review README for reproducibility and secret leakage.
-- [ ] Record lessons learned and next improvements.
+- [x] Summarize tested coverage and visibility limitations.
+- [x] Add a concise controlled network-alert case study to the incident playbooks.
+- [ ] Add sanitized screenshots of dashboard and service validation.
+- [ ] Review README and repository history for secret leakage and unnecessary identifying data.
+- [ ] Record final lessons learned and reproducibility notes.
 
 Acceptance criteria:
 - [ ] A reviewer can understand the architecture, reproduce documented tests, and distinguish verified facts from plans.
+- [ ] Public evidence is sanitized and does not disclose secrets or unnecessary host/user identifiers.
 
 ## Current milestone
 
-**Phase 4 — Network detection: next.** Wazuh 4.14.9 is deployed, Windows endpoint SF-WIN11-01 (ID 001) is Active, interactive authentication detection is validated, and file creation/modification/deletion detection passed in C:\SentinelForge-FIM-Test. Next, assess interface visibility and resource impact before deploying Suricata.
+**Phases 0–6 complete; Phase 7 — Reporting and polish remains.** Wazuh 4.14.9 is deployed, Windows endpoint SF-WIN11-01 (ID 001) is Active, authentication and FIM detections are validated, and Suricata 8.0.8 alerts are successfully collected, decoded, matched by Wazuh rule 86601, and visible in Threat Hunting. The manual asset register and investigation playbooks are populated. Remaining work is sanitized evidence, final repository/security review, and reproducibility polish.

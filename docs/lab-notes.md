@@ -88,7 +88,7 @@ The machine meets the published Wazuh Docker single-node requirements on paper, 
 - Wazuh manager, indexer and dashboard containers reported as running.
 - Indexer cluster reported GREEN.
 - Applied the updated indexer security configuration successfully.
-- Verified browser login to https://127.0.0.1:8443.
+- Verified browser login to `https://127.0.0.1:8443`.
 - Dashboard is bound to loopback only.
 - Indexer and agent/API ports are not published to the host for external access.
 - Credential file is outside the repository and has permissions 600.
@@ -116,7 +116,7 @@ The machine meets the published Wazuh Docker single-node requirements on paper, 
 - Confirmed manager, indexer and dashboard containers are running.
 - Queried the indexer cluster health API; status returned GREEN.
 - Confirmed essential manager services are running, including analysisd, remoted, logcollector, syscheckd and apid.
-- Verified dashboard access again at https://127.0.0.1:8443.
+- Verified dashboard access again at `https://127.0.0.1:8443`.
 - Available memory after startup: approximately 7.5 GiB.
 - Swap remains unconfigured.
 - Windows endpoint enrollment remains pending.
@@ -185,7 +185,7 @@ The machine meets the published Wazuh Docker single-node requirements on paper, 
 - Restart-Service initially failed while stopping WazuhSvc and left it Stopped. The configuration was rechecked and validated; Start-Service then succeeded, and Get-Service confirmed WazuhSvc Running.
 
 **FIM test results**
-- Created fim-create-test.txt in the test directory. Wazuh returned one rule 554 alert: “File added to the system”, level 5.
+- Created `fim-create-test.txt` in the test directory. Wazuh returned one rule 554 alert: “File added to the system”, level 5.
 - Appended a benign test line to the same file. Wazuh returned one rule 550 alert: “Integrity checksum changed”, level 7.
 - Deleted the same test file. Wazuh returned one rule 553 alert: “File deleted”, level 7.
 - All three alerts were visible in Threat Hunting for agent 001 during the November 10 validation session.
@@ -232,3 +232,42 @@ The machine meets the published Wazuh Docker single-node requirements on paper, 
 - No hostname, serial number, MAC address, machine ID or private IP address recorded.
 
 **Status:** Updated resource assessment recorded.
+
+### 2026-11-13 to 2026-11-14 — Suricata deployment and live Wazuh integration
+
+**Phase:** 4 — Network detection
+
+**Environment and configuration**
+- Host: Parrot Security 7.4; Windows 11 VirtualBox endpoint SF-WIN11-01.
+- SIEM: Wazuh 4.14.9 single-node Docker deployment.
+- Sensor: Suricata 8.0.8; `suricata-update` installed and ET Open rules downloaded.
+- Capture interface: `vboxnet0` using AF_PACKET; `HOME_NET` scoped to the VirtualBox host-only lab subnet.
+- EVE output: `/var/log/suricata/eve.json`.
+- Added two local ICMP test signatures: SID 1000001 for Windows-to-Parrot echo requests and SID 1000002 for the reverse direction.
+- `sudo suricata -T -c /etc/suricata/suricata.yaml` reported that the configuration loaded successfully.
+- Suricata systemd service started and reported `active`.
+- Wazuh manager Compose configuration mounts EVE JSON read-only and has a JSON `localfile` collector for `/var/log/suricata/eve.json`.
+- `docker compose config --quiet` passed. The manager container confirmed that the file was readable and its logcollector reported analyzing it.
+- Wazuh `wazuh-logtest` decoded a Suricata event with the JSON decoder and matched rule 86601.
+
+**Controlled end-to-end validation — 2026-11-14**
+- Started the Windows VM after checking available host memory.
+- Confirmed the Windows Wazuh service was Running and the host-only IPv4 address was present.
+- Sent four ICMP echo requests from Windows to the Parrot host using the host-only source address; ping returned four replies and 0% packet loss.
+- Suricata EVE JSON contained four fresh alerts for SID 1000001, with event timestamps 11:26:58–11:27:01 IST, source Windows endpoint, destination Parrot host, protocol ICMP, and interface `vboxnet0`.
+- Suricata alert action was `allowed`, consistent with passive IDS monitoring; no blocking was expected or tested.
+- Wazuh manager `alerts.json` contained four matching records under rule 86601, level 3, groups `ids` and `suricata`; decoder was `json` and manager agent ID was `000`.
+- Wazuh Threat Hunting query `rule.id:86601 AND data.alert.signature_id:1000001` returned **4 hits** in the dashboard screenshot reviewed on 2026-11-14.
+
+**Troubleshooting and observations**
+- After a clean shutdown, `vboxnet0` lost its Linux IP/link state. Reapplied the VirtualBox host-only adapter address and brought the Linux interface administratively up. The interface showed no carrier while the VM was powered off; it became UP when Windows started.
+- The Windows VM was kept off while Wazuh and Suricata were first restored to preserve RAM headroom. The full validation was run only after the host-only interface and Wazuh collector were ready.
+- Wazuh manager optional services such as cluster daemon and mail daemon were not running; the core single-node analysis, log collection, remote, database and API services were running.
+
+**Visibility and safety limitations**
+- The test validates only Windows-to-Parrot traffic visible on `vboxnet0`; it does not establish visibility into the physical LAN, NAT interface, internet, other VLANs, or all endpoints.
+- The local ICMP rule is a test signature, not a malicious-traffic verdict.
+- Suricata is passive IDS in this lab; no IPS blocking or automated response was tested.
+- Keep the Wazuh dashboard bound to loopback and all credentials/certificates outside Git.
+
+**Status:** PASS — Suricata event generation, Wazuh JSON collection/decoding, rule matching, and Threat Hunting dashboard visibility verified end to end.
