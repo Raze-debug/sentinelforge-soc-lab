@@ -22,4 +22,7 @@ Use this folder for sanitized screenshots or small evidence summaries that make 
 
 ## Current status
 
-The Suricata-to-Wazuh dashboard screenshot was reviewed locally on 2026-11-14 and showed four matching hits. It has not yet been committed to this repository. Before adding it, crop unrelated browser UI and redact any unnecessary account/API selector details. No raw credentials or raw EVE/alerts logs should be committed.
+- `suricata-wazuh-icmp-dashboard.png` is a sanitized dashboard capture from 2026-11-14 showing the query `rule.id:86601 AND data.alert.signature_id:1000001` returning four matching alerts.
+- The image excludes browser chrome, the local dashboard URL, and account/API selector details.
+- The capture demonstrates only the tested Windows-to-Parrot host-only ICMP traffic; it does not imply network-wide visibility.
+- No credentials or raw EVE/alerts logs are included.
