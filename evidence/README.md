@@ -28,3 +28,12 @@ Use this folder for sanitized screenshots or small evidence summaries that make 
 - The image excludes browser chrome, the local dashboard URL, and account/API selector details.
 - The screenshot demonstrates only the tested Windows-to-Parrot host-only ICMP traffic; it does not imply network-wide visibility.
 - No credentials or raw EVE/alerts logs are included.
+
+## SF-010 — Python vulnerability finding
+
+- Screenshot: `vulnerability-cve-2026-3087.png`
+- Date: 2026-11-14.
+- Expected result: Wazuh displays the vulnerability inventory entry for the monitored Windows endpoint.
+- Observed result: One High finding for CVE-2026-3087, associated with Python 3.13.15 (64-bit), package version 3.13.15150.0.
+- Interpretation: The finding was investigated and assessed as a false positive for the verified Python installation. See `docs/vulnerability-investigations.md`.
+- Limitation: This screenshot records the scanner finding; it does not show automatic resolution or suppression.
