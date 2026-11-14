@@ -22,7 +22,9 @@ Use this folder for sanitized screenshots or small evidence summaries that make 
 
 ## Current status
 
-- `suricata-wazuh-icmp-dashboard.png` is a sanitized dashboard capture from 2026-11-14 showing the query `rule.id:86601 AND data.alert.signature_id:1000001` returning four matching alerts.
+- `suricata-wazuh-icmp-dashboard.png` is a sanitized dashboard capture from 2026-11-14.
+- Query: `rule.id:86601 AND data.alert.signature_id:1000001`.
+- Observed result: four matching Wazuh alerts, rule 86601, level 3.
 - The image excludes browser chrome, the local dashboard URL, and account/API selector details.
-- The capture demonstrates only the tested Windows-to-Parrot host-only ICMP traffic; it does not imply network-wide visibility.
+- The screenshot demonstrates only the tested Windows-to-Parrot host-only ICMP traffic; it does not imply network-wide visibility.
 - No credentials or raw EVE/alerts logs are included.
