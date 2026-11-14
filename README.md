@@ -62,6 +62,7 @@ Management services must not be exposed directly to the public internet. The Waz
 - [Roadmap](docs/roadmap.md) — phased work and acceptance criteria.
 - [Lab notes](docs/lab-notes.md) — commands, observations, errors, and fixes.
 - [Detection validation](docs/detection-validation.md) — expected versus observed outcomes.
+- [Vulnerability investigations](docs/vulnerability-investigations.md) — CVE validation, false-positive analysis, and remediation decisions.
 - [Incident playbooks](docs/incident-playbooks.md) — repeatable investigation steps and a completed controlled case.
 - [Asset register](docs/asset-register-template.md) — lab asset context.
 - [Evidence guide](evidence/README.md) — safe screenshots and redaction.

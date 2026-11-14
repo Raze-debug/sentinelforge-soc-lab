@@ -24,6 +24,8 @@ This register tracks what the lab actually detects. Observed fields are populate
 | SF-008 | Suricata-to-SIEM forwarding | Configure Wazuh JSON localfile collection and search for the test event | Event decoded, matched by Wazuh and visible in Threat Hunting | Read-only bind mount of EVE JSON was readable by the manager; logcollector reported analyzing the file; JSON decoder extracted event fields; Wazuh rule 86601 (level 3, groups `ids` and `suricata`) generated four alerts; dashboard query returned 4 hits | PASS |
 | SF-009 | Asset register review | Inventory the lab-owned host, endpoint and logical sensor component | Known assets, purpose, responsibility and lab-relative criticality recorded | Manual register populated for the Parrot/Wazuh host, Windows endpoint and Suricata sensor service hosted on the Parrot system; no network-wide discovery claim | PASS |
 
+| SF-010 | Vulnerability finding validation | Compare Wazuh package inventory, vendor affected-version data, installed source, and a safe regression test | Determine whether the reported CVE applies to the installed package | CVE-2026-3087 on Python 3.13.15: vendor range excludes 3.13.15; installed ZIP extraction guard and harmless regression test passed; Wazuh NVD CPE condition was broader (<= 3.14.4); documented as false positive in `docs/vulnerability-investigations.md` | PASS (false positive identified) |
+
 ## Validated Windows authentication details
 
 - Endpoint: SF-WIN11-01, agent ID 001.
