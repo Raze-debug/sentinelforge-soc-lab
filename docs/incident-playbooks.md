@@ -120,7 +120,7 @@ Do not automatically isolate systems, disable accounts, or delete files just bec
 - Process-level attribution for the ICMP packet was not collected by this test.
 - A level-3 IDS alert is a triage signal, not proof of compromise.
 
-**Evidence references:** `docs/detection-validation.md` (SF-006 to SF-008); local Suricata EVE output; Wazuh manager `alerts.json`; Wazuh Threat Hunting screenshot to be added after sanitization.
+**Evidence references:** `docs/detection-validation.md` (SF-006 to SF-008); local Suricata EVE output; Wazuh manager `alerts.json`; Sanitized Wazuh Threat Hunting evidence: `evidence/suricata-wazuh-icmp-dashboard.png`.
 
 ## Investigation record template
 
