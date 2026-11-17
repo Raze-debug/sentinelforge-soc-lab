@@ -271,3 +271,53 @@ The machine meets the published Wazuh Docker single-node requirements on paper, 
 - Keep the Wazuh dashboard bound to loopback and all credentials/certificates outside Git.
 
 **Status:** PASS — Suricata event generation, Wazuh JSON collection/decoding, rule matching, and Threat Hunting dashboard visibility verified end to end.
+
+### 2026-11-17 — Windows failed-login detection validation (SF-011)
+
+**Phase:** 2 — Windows endpoint telemetry; Phase 3 — Detection validation
+
+**Environment**
+- SIEM: Wazuh 4.14.9 single-node Docker deployment on Parrot OS.
+- Endpoint: Windows 11 VirtualBox VM.
+- Agent: SF-WIN11-01, ID 001.
+- Network: NAT + VirtualBox host-only adapter.
+- Wazuh manager reported the Windows agent Active before testing.
+
+**Actions**
+- Verified the Windows host-only adapter could reach the Parrot host on TCP 1514.
+- Confirmed the Parrot host-only interface was UP and Wazuh ports 1514 and 1515 were listening.
+- Confirmed `agent_control -l` reported SF-WIN11-01 (001) as Active.
+- Checked the Windows Security log for Event ID 4625; no matching events were present in the initial baseline query.
+- Performed one controlled incorrect-password attempt during a local interactive sign-in, then signed in normally.
+- Queried the Windows Security log and confirmed Event ID 4625.
+
+**Observed result**
+- Windows event provider: `Microsoft-Windows-Security-Auditing`.
+- Event ID: 4625 — An account failed to log on.
+- Event time: 2026-11-17 21:35:06 IST.
+- Logon type: 2 (Interactive).
+- Failure status: `0xc000006d`; substatus: `0xc000006a` (incorrect password).
+- Wazuh received the event from agent SF-WIN11-01 (001).
+- Wazuh decoder: `windows_eventchannel`.
+- Wazuh rule: 60122 — "Logon Failure - Unknown user or bad password".
+- Rule level: 5; one matching alert observed.
+- Threat Hunting query for agent 001 and Event ID 4625 returned one hit.
+- The alert's source address was `127.0.0.1`, consistent with a local interactive logon attempt.
+
+**Verification**
+- Windows Security log confirmed Event ID 4625.
+- Wazuh Threat Hunting showed one authentication-failure alert.
+- Expanded alert JSON confirmed the agent, event ID, failed account, logon type, status codes, decoder and rule metadata.
+
+**Troubleshooting and observations**
+- The agent was initially Disconnected while the host-only interface was unavailable.
+- Restoring the host-only interface and confirming the Wazuh listener on TCP 1514 resulted in the agent reporting Active.
+- PowerShell service commands were not run in Parrot Bash; the agent was already Active when the final connectivity check was completed.
+
+**Security/privacy notes**
+- The test used one controlled incorrect-password attempt.
+- The event was local interactive authentication, not a remote attack simulation.
+- No passwords or credentials are recorded in this repository entry.
+- Rule metadata includes MITRE technique T1531; this is metadata and does not mean account removal was performed.
+
+**Status:** PASS — Windows Event ID 4625 collection, Wazuh rule 60122 matching and Threat Hunting visibility verified.

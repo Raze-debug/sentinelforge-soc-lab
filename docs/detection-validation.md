@@ -25,6 +25,7 @@ This register tracks what the lab actually detects. Observed fields are populate
 | SF-009 | Asset register review | Inventory the lab-owned host, endpoint and logical sensor component | Known assets, purpose, responsibility and lab-relative criticality recorded | Manual register populated for the Parrot/Wazuh host, Windows endpoint and Suricata sensor service hosted on the Parrot system; no network-wide discovery claim | PASS |
 
 | SF-010 | Vulnerability finding validation | Compare Wazuh package inventory, vendor affected-version data, installed source, and a safe regression test | Determine whether the reported CVE applies to the installed package | CVE-2026-3087 on Python 3.13.15: vendor range excludes 3.13.15; installed ZIP extraction guard and harmless regression test passed; Wazuh NVD CPE condition was broader (<= 3.14.4); documented as false positive in `docs/vulnerability-investigations.md` | PASS (false positive identified) |
+| SF-011 | Windows failed interactive logon | Make one controlled incorrect-password attempt on the Windows 11 lab VM | Security Event ID 4625 reaches Wazuh and matches an authentication-failure rule | SF-WIN11-01 (agent 001): Event ID 4625 collected; Wazuh rule 60122, "Logon Failure - Unknown user or bad password", level 5; one alert observed | PASS |
 
 ## Validated Windows authentication details
 
@@ -97,3 +98,25 @@ Use sanitized screenshots or synthetic examples in the public repository. Keep r
 ## Interpretation caution
 
 A passing test demonstrates only that the specific tested path worked under the recorded conditions. It does not prove complete detection coverage. A failed test may indicate collection, network visibility, rule, timing, or test-design issues; investigate the full path before concluding why it failed.
+
+## Validated Windows failed-authentication details
+
+- Test ID: SF-011.
+- Endpoint: SF-WIN11-01, agent ID 001.
+- Environment: Windows 11 VirtualBox endpoint; Wazuh 4.14.9 single-node deployment.
+- Controlled test: one intentionally incorrect password during a local interactive sign-in.
+- Windows Security event: Event ID 4625, provider `Microsoft-Windows-Security-Auditing`.
+- Event time: 2026-11-17 21:35:06 IST.
+- Failed account: `windows11_vm`.
+- Logon type: 2 (Interactive).
+- Status: `0xc000006d`; substatus: `0xc000006a` (incorrect password).
+- Wazuh decoder: `windows_eventchannel`.
+- Wazuh location: `EventChannel`.
+- Wazuh rule: 60122, "Logon Failure - Unknown user or bad password".
+- Rule level: 5; observed fired-times value: 1.
+- Rule groups: `windows`, `windows_security`, `authentication_failed`.
+- Threat Hunting query: `agent.id: "001" AND data.win.system.eventID: "4625"`.
+- Dashboard result: one matching alert for SF-WIN11-01.
+- The event's source address was loopback (`127.0.0.1`); this was a local interactive logon failure, not a remote network login.
+- Rule metadata includes MITRE technique T1531. This is rule metadata and does not establish that account removal occurred.
+- Status: PASS — Windows event generation, agent collection, Wazuh rule matching and dashboard visibility verified.
