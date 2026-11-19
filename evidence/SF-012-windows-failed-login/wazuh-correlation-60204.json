@@ -1,0 +1,42 @@
+{
+  "validation_id": "SF-012",
+  "validation_name": "Windows Failed Login Detection and Correlation",
+  "status": "PASS",
+  "agent": {
+    "name": "SF-WIN11-01",
+    "id": "001",
+    "ip": "192.168.56.101"
+  },
+  "test_account": "SFLockoutTest",
+  "windows_event": {
+    "event_id": 4625,
+    "event_description": "An account failed to log on",
+    "logon_type": 2,
+    "status": "0xc000006d",
+    "sub_status": "0xc000006a",
+    "failure_reason": "Unknown user name or bad password",
+    "source_address": "::1"
+  },
+  "wazuh_alert": {
+    "rule_id": "60204",
+    "description": "Multiple Windows Logon Failures",
+    "level": 10,
+    "frequency": 8,
+    "fired_times": 1,
+    "groups": [
+      "windows",
+      "windows_security",
+      "authentication_failures"
+    ]
+  },
+  "mitre_attack": {
+    "technique_id": "T1110",
+    "technique": "Brute Force",
+    "tactic": "Credential Access"
+  },
+  "account_lockout": {
+    "event_id": 4740,
+    "confirmed": false
+  },
+  "result": "Repeated failed logons were detected and correlated by Wazuh. Actual account lockout was not confirmed."
+}

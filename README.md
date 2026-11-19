@@ -90,6 +90,7 @@ This project is for defensive learning and authorized testing. Use sanitized scr
 | Windows agent installation and enrollment | Complete — SF-WIN11-01, ID 001, Active |
 | Windows Security-event ingestion | Complete — Security-channel events visible in Wazuh |
 | Interactive Windows authentication detection | Complete — Event ID 4624, logon type 2, rule 60118, level 3 |
+| Repeated failed-login detection | Complete — Event ID 4625, rules 60122 (level 5) and 60204 (level 10 correlation); 8 failures + 1 correlation alert |
 | File creation detection | Complete — rule 554, level 5 |
 | File modification detection | Complete — rule 550, level 7 |
 | File deletion detection | Complete — rule 553, level 7 |

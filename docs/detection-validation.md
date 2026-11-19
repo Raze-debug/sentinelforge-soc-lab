@@ -120,3 +120,31 @@ A passing test demonstrates only that the specific tested path worked under the 
 - The event's source address was loopback (`127.0.0.1`); this was a local interactive logon failure, not a remote network login.
 - Rule metadata includes MITRE technique T1531. This is rule metadata and does not establish that account removal occurred.
 - Status: PASS — Windows event generation, agent collection, Wazuh rule matching and dashboard visibility verified.
+
+## Validated Windows repeated failed-authentication detection
+
+- Test ID: SF-012.
+- Test date: 2026-11-18 (IST).
+- Endpoint: SF-WIN11-01, agent ID 001, IP 192.168.56.101.
+- Environment: Windows 11 VirtualBox endpoint; Wazuh 4.14.9 single-node deployment.
+- Test account: `SFLockoutTest`, dedicated non-administrator local account.
+- Controlled test: repeated incorrect-password attempts using local interactive logon (logon type 2).
+- Windows Security event: Event ID 4625, provider `Microsoft-Windows-Security-Auditing`.
+- Failure status: `0xc000006d`; substatus: `0xc000006a` (incorrect password).
+- Failed account: `SFLockoutTest`.
+- Source address: `::1` (localhost IPv6).
+- Wazuh decoder: `windows_eventchannel`.
+- Wazuh location: `EventChannel`.
+- Individual Wazuh rule: 60122, "Logon Failure - Unknown user or bad password", level 5.
+- Correlation Wazuh rule: 60204, "Multiple Windows Logon Failures", level 10.
+- Correlation frequency: 8 failed events.
+- Correlation fired-times value: 1.
+- Correlation groups: `windows`, `windows_security`, `authentication_failures`.
+- MITRE mapping: T1110 (Brute Force), Credential Access.
+- Threat Hunting query used to filter test activity by agent, Event ID 4625, and target account `SFLockoutTest`.
+- Dashboard result: 9 matching alerts — 8 individual failed-logon alerts and 1 multiple-failure correlation alert.
+- Evidence: `evidence/SF-012-windows-failed-login/`.
+- Evidence files: `wazuh-alert-overview.png`, `wazuh-alert-details.png`, `wazuh-correlation-60204.json`.
+- Account-lockout verification: Event ID 4740 was not observed in the queried Security log period; actual account lockout was not confirmed.
+- Limitations: validation used local interactive authentication failures against a dedicated test account; it does not establish detection coverage for remote authentication, other logon types, or all brute-force scenarios.
+- Status: PASS — Windows Event 4625 generation, Wazuh collection, individual failed-logon alerting, and Level 10 repeated-failure correlation verified. Actual account lockout remains unverified.

@@ -321,3 +321,45 @@ The machine meets the published Wazuh Docker single-node requirements on paper, 
 - Rule metadata includes MITRE technique T1531; this is metadata and does not mean account removal was performed.
 
 **Status:** PASS — Windows Event ID 4625 collection, Wazuh rule 60122 matching and Threat Hunting visibility verified.
+
+## SF-012 — Windows Repeated Failed Authentication Detection
+
+**Test setup**
+- Used dedicated local standard account `SFLockoutTest` on Windows 11 VM.
+- Verified the account was not a local administrator.
+- Confirmed Windows logon auditing was enabled for Success and Failure.
+- Wazuh Windows agent SF-WIN11-01 (001) was active.
+
+**Test performed**
+- Performed multiple controlled incorrect-password attempts using local interactive authentication.
+- Reviewed the Windows Security log over an extended time window and confirmed Event ID 4625 records for `SFLockoutTest`.
+- Filtered Wazuh Threat Hunting for agent 001, Event ID 4625, and the test account.
+
+**Observed result**
+- Windows Security Event ID: 4625 — failed logon.
+- Account: `SFLockoutTest`.
+- Logon type: 2 (Interactive).
+- Status: `0xc000006d`; substatus: `0xc000006a`.
+- Source address: `::1` (localhost IPv6).
+- Wazuh individual detection: rule 60122, level 5 — Logon Failure - Unknown user or bad password.
+- Wazuh correlation detection: rule 60204, level 10 — Multiple Windows Logon Failures.
+- Correlation frequency: 8 failed events.
+- Threat Hunting result: 9 alerts (8 individual failures and 1 correlation alert).
+
+**Verification and evidence**
+- Confirmed failed-logon events were present in Windows Security logs.
+- Confirmed Wazuh collected and displayed individual failed-logon alerts.
+- Confirmed the higher-level repeated-failure correlation alert.
+- Evidence saved under `evidence/SF-012-windows-failed-login/`.
+
+**Limitations**
+- This test covered local interactive authentication only.
+- Event ID 4740 was not found in the queried period; an actual account lockout was not confirmed.
+- This validation does not demonstrate detection coverage for remote authentication or every brute-force scenario.
+
+**Security notes**
+- Used a dedicated test account, not the normal daily account.
+- No passwords or credentials were recorded in the repository.
+- Avoided further failed attempts after the controlled test.
+
+**Status:** PASS — Windows Event ID 4625 generation, Wazuh collection, rule 60122 individual detection, and rule 60204 Level 10 repeated-failure correlation verified. Actual account lockout remains unverified.
