@@ -148,3 +148,27 @@ A passing test demonstrates only that the specific tested path worked under the 
 - Account-lockout verification: Event ID 4740 was not observed in the queried Security log period; actual account lockout was not confirmed.
 - Limitations: validation used local interactive authentication failures against a dedicated test account; it does not establish detection coverage for remote authentication, other logon types, or all brute-force scenarios.
 - Status: PASS — Windows Event 4625 generation, Wazuh collection, individual failed-logon alerting, and Level 10 repeated-failure correlation verified. Actual account lockout remains unverified.
+
+## Validated Windows local user account creation detection
+
+- Test ID: SF-013.
+- Test date: 2026-11-21.
+- Environment: Windows 11 VirtualBox endpoint; Wazuh 4.14.9 single-node deployment.
+- Controlled test: created a local test account named `SF013_TestUser`.
+- Windows Security event: Event ID 4720, "A user account was created."
+- Event provider: `Microsoft-Windows-Security-Auditing`.
+- Audit result: `AUDIT_SUCCESS`.
+- Creator account: `windows11_vm`.
+- Target account: `SF013_TestUser`.
+- Wazuh decoder: `windows_eventchannel`.
+- Wazuh rule: 60109, "User account enabled or created."
+- Alert level: 8.
+- Observed fired-times value: 1.
+- Rule groups: `windows`, `windows_security`, `adduser`, `account_changed`.
+- Account attributes reported: Account Disabled; Password Not Required - Enabled; Normal Account - Enabled.
+- MITRE mapping: T1098 (Account Manipulation), Persistence.
+- Validation result: Wazuh successfully collected Windows Event ID 4720 and generated the corresponding level 8 alert for the controlled account creation.
+- Limitation: the event reported the target account as disabled. This validation confirms account creation detection, not account activation or subsequent use.
+- Evidence directory: `evidence/SF-013-windows-account-creation/`.
+- Evidence files: `sf013-alert-overview.png`, `sf013-event-summary.json`.
+- Status: PASS — Windows account-creation event generation, Wazuh collection, rule matching, and dashboard visibility verified.

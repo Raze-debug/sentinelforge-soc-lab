@@ -1,0 +1,46 @@
+{
+  "validation_id": "SF-013",
+  "validation_name": "Windows Local User Account Creation Detection",
+  "result": "success",
+  "event": {
+    "event_id": 4720,
+    "channel": "Security",
+    "provider": "Microsoft-Windows-Security-Auditing",
+    "audit_result": "AUDIT_SUCCESS",
+    "target_user": "SF013_TestUser",
+    "creator_user": "windows11_vm",
+    "account_domain": "LAB-WINDOWS",
+    "new_account_sid": "REDACTED",
+    "new_uac_value": "0x15",
+    "old_uac_value": "0x0",
+    "account_flags": [
+      "Account Disabled",
+      "Password Not Required - Enabled",
+      "Normal Account - Enabled"
+    ]
+  },
+  "detection": {
+    "platform": "Wazuh",
+    "rule_id": "60109",
+    "rule_description": "User account enabled or created",
+    "alert_level": 8,
+    "fired_times": 1,
+    "groups": [
+      "windows",
+      "windows_security",
+      "adduser",
+      "account_changed"
+    ],
+    "mitre": {
+      "id": "T1098",
+      "technique": "Account Manipulation",
+      "tactic": "Persistence"
+    }
+  },
+  "validation_notes": [
+    "Windows Security Event ID 4720 was successfully collected.",
+    "Wazuh generated alert 60109 at level 8.",
+    "The target account matched the controlled test account.",
+    "The account was reported as disabled in the event attributes."
+  ]
+}

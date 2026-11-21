@@ -363,3 +363,43 @@ The machine meets the published Wazuh Docker single-node requirements on paper, 
 - Avoided further failed attempts after the controlled test.
 
 **Status:** PASS — Windows Event ID 4625 generation, Wazuh collection, rule 60122 individual detection, and rule 60204 Level 10 repeated-failure correlation verified. Actual account lockout remains unverified.
+
+---
+
+## Session: SF-013 — Windows Local User Account Creation Detection
+
+**Date:** 2026-11-21
+
+**Objective**
+- Validate detection of local Windows user account creation using Windows Security auditing and Wazuh.
+
+**Environment recovery**
+- Restored the VirtualBox host-only interface `vboxnet0` after it was found down.
+- Re-added host-only address `192.168.56.1/24`.
+- Started the Wazuh Docker single-node stack.
+- Confirmed the Wazuh dashboard was accessible and the Windows endpoint agent was active.
+
+**Test performed**
+- Created controlled test account `SF013_TestUser` on the Windows endpoint.
+- Windows Security Event ID 4720 was generated and collected.
+- Wazuh detected the event using rule 60109, level 8.
+- Observed fired-times value: 1.
+- MITRE mapping observed: T1098 — Account Manipulation / Persistence.
+
+**Verification and evidence**
+- Confirmed the account-creation event in Wazuh Threat Hunting.
+- Confirmed the alert matched the controlled test account.
+- Saved alert overview screenshot and sanitized event summary.
+- Evidence stored under `evidence/SF-013-windows-account-creation/`.
+
+**Limitations**
+- The event reported the target account as disabled.
+- Account activation or subsequent use was not tested.
+- This validation confirms account-creation detection only.
+
+**Security notes**
+- Used a dedicated test account.
+- Raw event details containing identifying information were not intended for public repository use.
+- Public evidence is sanitized.
+
+**Status:** PASS — Windows Event ID 4720 collection and Wazuh rule 60109 alerting verified.
