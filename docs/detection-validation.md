@@ -172,3 +172,45 @@ A passing test demonstrates only that the specific tested path worked under the 
 - Evidence directory: `evidence/SF-013-windows-account-creation/`.
 - Evidence files: `sf013-alert-overview.png`, `sf013-event-summary.json`.
 - Status: PASS — Windows account-creation event generation, Wazuh collection, rule matching, and dashboard visibility verified.
+
+## SF-014 — Windows Defender Telemetry Collection Validation
+
+**Status:** PASS
+**Date:** 22 November 2026
+**Type:** Telemetry Collection Validation
+
+### Objective
+Validate that Windows Defender Operational events are collected by the Windows Wazuh agent and successfully received by the Wazuh Manager.
+
+### Telemetry Source
+- Channel: `Microsoft-Windows-Windows Defender/Operational`
+- Event ID `1000`: Antimalware scan started
+- Event ID `1001`: Antimalware scan completed
+
+### Test Procedure
+A legitimate Windows Defender Quick Scan was initiated on the test endpoint. The scan start and completion events were verified at the source and subsequently confirmed in the Wazuh Manager JSON archives.
+
+### Observed Results
+
+| Event | Wazuh Rule | Level |
+|---|---|---|
+| Scan started | 62107 | 3 |
+| Scan finished | 62108 | 3 |
+
+- Decoder: `windows_eventchannel`
+- Location: `EventChannel`
+- Agent communication: Active during validation
+- Quick Scan duration: 37 seconds
+- Manager archive verification: Confirmed
+
+### Outcome
+Both Windows Defender scan lifecycle events were successfully collected and processed by Wazuh, confirming end-to-end telemetry collection from the endpoint to the Manager.
+
+### Scope and Limitations
+This validation confirms telemetry collection and event processing only. Malware detection, malware prevention, and malicious-file response were not tested.
+
+Temporary JSON archive logging was disabled after validation and the active Manager configuration was verified.
+
+### Evidence
+- `evidence/SF-014-windows-defender-telemetry/sf014-summary.txt`
+- `evidence/SF-014-windows-defender-telemetry/sf014-event-summary.json`

@@ -403,3 +403,23 @@ The machine meets the published Wazuh Docker single-node requirements on paper, 
 - Public evidence is sanitized.
 
 **Status:** PASS — Windows Event ID 4720 collection and Wazuh rule 60109 alerting verified.
+
+## SF-014 — Windows Defender Telemetry Collection
+
+**Status:** Completed
+**Outcome:** PASS
+
+Validated end-to-end collection of Windows Defender Operational events through the Windows Wazuh agent to the Wazuh Manager.
+
+- Verified scan-start Event ID 1000
+- Verified scan-completion Event ID 1001
+- Confirmed Wazuh rules 62107 and 62108 triggered at Level 3
+- Confirmed `windows_eventchannel` decoding
+- Verified events in Manager JSON archives
+- Quick Scan completed in 37 seconds
+- Disabled temporary JSON archive logging after validation
+
+This milestone validates telemetry collection and event processing only; malware detection/prevention was not tested.
+
+Evidence stored under:
+`evidence/SF-014-windows-defender-telemetry/`

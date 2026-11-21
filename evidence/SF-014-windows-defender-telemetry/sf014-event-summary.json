@@ -1,0 +1,43 @@
+{
+  "project": "SentinelForge SOC Lab",
+  "validation_id": "SF-014",
+  "title": "Windows Defender Telemetry Collection Validation",
+  "status": "PASS",
+  "objective": "Validate Windows Defender Operational event collection through the Wazuh agent to the Wazuh Manager.",
+  "source": {
+    "channel": "Microsoft-Windows-Windows Defender/Operational",
+    "event_ids": {
+      "1000": "Antimalware scan started",
+      "1001": "Antimalware scan completed"
+    }
+  },
+  "test": {
+    "type": "Windows Defender Quick Scan",
+    "scan_duration_seconds": 37,
+    "malware_test_performed": false
+  },
+  "wazuh": {
+    "decoder": "windows_eventchannel",
+    "location": "EventChannel",
+    "rules": [
+      {
+        "id": "62107",
+        "description": "Windows Defender: Antimalware scan started",
+        "level": 3
+      },
+      {
+        "id": "62108",
+        "description": "Windows Defender: Antimalware scan finished",
+        "level": 3
+      }
+    ],
+    "agent_status_during_validation": "Active",
+    "manager_archive_verification": true
+  },
+  "result": "Scan start and completion events were successfully collected and verified in the Wazuh Manager JSON archives.",
+  "scope": "Telemetry collection and event processing only. Malware detection and prevention were not tested.",
+  "cleanup": {
+    "temporary_json_archiving_disabled": true,
+    "active_manager_configuration_verified": true
+  }
+}

@@ -1,0 +1,47 @@
+SentinelForge SOC Lab
+Validation ID: SF-014
+Title: Windows Defender Telemetry Collection Validation
+Status: PASS
+
+Objective:
+Validate collection of Microsoft Windows Defender Operational
+events from the Windows endpoint through the Wazuh agent
+to the Wazuh Manager.
+
+Telemetry Source:
+Microsoft-Windows-Windows Defender/Operational
+
+Test Performed:
+A legitimate Windows Defender Quick Scan was initiated on
+the test Windows endpoint.
+
+Source Events Observed:
+Event ID 1000 - Scan started
+Event ID 1001 - Scan completed
+
+Wazuh Detection/Processing:
+Rule ID 62107 - Antimalware scan started (Level 3)
+Rule ID 62108 - Antimalware scan finished (Level 3)
+
+Event Processing:
+Decoder: windows_eventchannel
+Location: EventChannel
+Agent communication: Active
+Manager archive verification: Confirmed during validation
+
+Scan Result:
+Quick Scan completed successfully.
+Observed duration: 37 seconds.
+
+Validation Outcome:
+Windows Defender Operational events were successfully collected
+by the Wazuh agent and received by the Wazuh Manager.
+Both scan-start and scan-completion telemetry were verified
+in the Manager's JSON archives.
+
+Scope Limitation:
+This validation confirms telemetry collection and event processing.
+It does NOT validate malware detection, malware prevention,
+or response to malicious files.
+
+Temporary JSON archive logging was disabled after validation.
