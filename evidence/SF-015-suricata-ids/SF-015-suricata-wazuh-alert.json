@@ -1,0 +1,76 @@
+{
+  "_index": "wazuh-alerts-4.x-2026.11.22",
+  "_id": "REDACTED",
+  "_score": null,
+  "_source": {
+    "input": {
+      "type": "log"
+    },
+    "agent": {
+      "name": "wazuh.manager",
+      "id": "000"
+    },
+    "manager": {
+      "name": "wazuh.manager"
+    },
+    "data": {
+      "icmp_type": "8",
+      "ip_v": "4",
+      "in_iface": "vboxnet0",
+      "src_ip": "WINDOWS_VM_IP",
+      "event_type": "alert",
+      "alert": {
+        "severity": "3",
+        "signature_id": "1000001",
+        "rev": "1",
+        "gid": "1",
+        "signature": "SentinelForge TEST Windows ICMP echo request",
+        "action": "allowed"
+      },
+      "flow_id": "REDACTED",
+      "dest_ip": "PARROT_HOST_IP",
+      "proto": "ICMP",
+      "icmp_code": "0",
+      "pkt_src": "wire/pcap",
+      "flow": {
+        "src_ip": "WINDOWS_VM_IP",
+        "pkts_toserver": "9",
+        "dest_ip": "PARROT_HOST_IP",
+        "start": "2026-11-22T23:41:33.975894+0530",
+        "bytes_toclient": "592",
+        "bytes_toserver": "666",
+        "pkts_toclient": "8"
+      },
+      "timestamp": "2026-11-22T23:41:42.117102+0530",
+      "direction": "to_server"
+    },
+    "rule": {
+      "firedtimes": 9,
+      "mail": false,
+      "level": 3,
+      "description": "Suricata: Alert - SentinelForge TEST Windows ICMP echo request",
+      "groups": [
+        "ids",
+        "suricata"
+      ],
+      "id": "86601"
+    },
+    "location": "/var/log/suricata/eve.json",
+    "decoder": {
+      "name": "json"
+    },
+    "id": "REDACTED",
+    "timestamp": "2026-11-22T18:11:43.860+0000"
+  },
+  "fields": {
+    "timestamp": [
+      "2026-11-22T18:11:43.860Z"
+    ],
+    "data.timestamp": [
+      "2026-11-22T23:41:42.117Z"
+    ]
+  },
+  "sort": [
+    1795371093860
+  ]
+}

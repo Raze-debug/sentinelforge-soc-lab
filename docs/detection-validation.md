@@ -214,3 +214,34 @@ Temporary JSON archive logging was disabled after validation and the active Mana
 ### Evidence
 - `evidence/SF-014-windows-defender-telemetry/sf014-summary.txt`
 - `evidence/SF-014-windows-defender-telemetry/sf014-event-summary.json`
+
+
+## SF-015 — Suricata IDS Alert and Wazuh Integration Validation
+
+- **Test ID:** SF-015.
+- **Test date:** 2026-11-22.
+- **Environment:** Parrot Security 7.4; Suricata 8.0.8; Wazuh 4.14.9 single-node Docker deployment.
+- **Sensor interface:** `vboxnet0` (VirtualBox host-only network).
+- **Capture method:** AF_PACKET.
+- **Controlled test:** Ten ICMP echo requests from the Windows lab VM to the Parrot host.
+- **Network validation:** Windows ping completed with 10 sent, 10 received, and 0% packet loss.
+- **Capture validation:** Suricata statistics confirmed packet capture with zero kernel packet drops and zero capture errors during the observed test.
+- **Suricata custom rule:** SID 1000001, revision 1, "SentinelForge TEST Windows ICMP echo request".
+- **Suricata alert action:** `allowed`; expected for passive IDS monitoring. Traffic blocking was not tested.
+- **EVE JSON:** Matching `event_type: alert` records were observed in `/var/log/suricata/eve.json`.
+- **Wazuh collection:** Manager Logcollector monitored the Suricata EVE JSON file using JSON localfile collection.
+- **Wazuh decoder:** `json`.
+- **Wazuh rule:** 86601, "Suricata: Alert - SentinelForge TEST Windows ICMP echo request".
+- **Alert level:** 3.
+- **Rule groups:** `ids`, `suricata`.
+- **Dashboard validation:** Threat Hunting displayed matching alerts for rule 86601 and custom signature ID 1000001; ten alert occurrences were observed.
+- **Evidence directory:** `evidence/SF-015-suricata-ids/`.
+- **Evidence files:** `SF-015-suricata-wazuh-alert.json`, `SF-015-wazuh-dashboard-alert.png`.
+- **Status:** PASS — Suricata packet capture, custom alert generation, EVE JSON logging, Wazuh collection, rule matching, and dashboard visibility verified.
+
+### Scope and Limitations
+
+- Validation covered the Windows-to-Parrot traffic observed on the VirtualBox host-only interface only.
+- This test does not establish visibility into the physical LAN, NAT interface, Internet traffic, other VLANs, or other endpoints.
+- Suricata was operated as a passive IDS. IPS blocking, automated containment, and prevention were not tested.
+- The test confirms detection and SIEM integration for the specific controlled ICMP scenario; it does not demonstrate comprehensive network threat-detection coverage.
