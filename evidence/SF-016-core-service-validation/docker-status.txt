@@ -1,0 +1,4 @@
+NAMES                           STATUS
+single-node-wazuh.dashboard-1   Up About an hour
+single-node-wazuh.manager-1     Up 48 minutes
+single-node-wazuh.indexer-1     Up About an hour

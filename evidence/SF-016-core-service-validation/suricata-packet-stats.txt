@@ -1,0 +1,4 @@
+capture.kernel_packets                                       | Total                     | 30110
+capture.afpacket.poll_data                                   | Total                     | 14186
+decoder.pkts                                                 | Total                     | 30110
+detect.alert                                                 | Total                     | 5

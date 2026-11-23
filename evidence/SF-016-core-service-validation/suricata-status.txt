@@ -1,0 +1,5 @@
+Suricata service: active (running)
+Version: 8.0.8
+Mode: SYSTEM
+Capture method: AF_PACKET
+Startup: manually started during SF-016 validation (disabled at boot)
