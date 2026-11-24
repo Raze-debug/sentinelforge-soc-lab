@@ -1,0 +1,39 @@
+SentinelForge SF-017 - Recovery Helper Validation
+Date: 2026-11-25
+Timezone: IST (UTC+05:30)
+
+RECOVERY HELPER
+Result: PASS
+Host-only interface: Verified
+Docker: Active
+Wazuh Indexer: Running
+Wazuh Manager: Running
+Wazuh Dashboard: Running
+Suricata: Active
+Dashboard HTTP response: 302
+
+CONTROLLED DETECTION TEST
+Source: Windows 11 lab VM
+Destination: Parrot host
+Traffic: 5 ICMP echo requests
+Connectivity: 5 sent, 5 received, 0% loss
+
+SURICATA
+Custom SID: 1000001
+Matching alerts: 5
+Action: allowed
+
+WAZUH
+Rule ID: 86601
+Rule level: 3
+Matching alerts: 5
+Decoder: json
+
+FINAL RESULT
+Manual recovery-helper validation: PASS
+End-to-end detection validation: PASS
+
+LIMITATIONS
+No reboot-based recovery test performed.
+Windows VM autostart remains disabled.
+No automatic boot-time recovery established.

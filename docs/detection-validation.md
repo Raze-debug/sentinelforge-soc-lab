@@ -245,3 +245,26 @@ Temporary JSON archive logging was disabled after validation and the active Mana
 - This test does not establish visibility into the physical LAN, NAT interface, Internet traffic, other VLANs, or other endpoints.
 - Suricata was operated as a passive IDS. IPS blocking, automated containment, and prevention were not tested.
 - The test confirms detection and SIEM integration for the specific controlled ICMP scenario; it does not demonstrate comprehensive network threat-detection coverage.
+
+
+## SF-017 — Manual Recovery Helper and Detection Validation
+
+- **Test ID:** SF-017.
+- **Test date:** 2026-11-25.
+- **Environment:** Parrot Security 7.4; Docker 29.9.2; Wazuh 4.14.9; Suricata 8.0.8.
+- **Recovery method:** Manually started Windows lab VM, then executed `scripts/sf-recovery.sh`.
+- **Recovery checks:** Host-only interface verified; Docker active; all three Wazuh containers running; Suricata active.
+- **Dashboard check:** HTTPS endpoint returned HTTP 302. This confirms a response, not authenticated dashboard functionality.
+- **Network validation:** Five Windows-to-Parrot ICMP echo requests; 5 received, 0% packet loss.
+- **Suricata validation:** Five matching alerts for custom SID 1000001 in EVE JSON.
+- **Wazuh validation:** Five matching alerts for rule 86601, level 3; JSON decoder.
+- **Evidence directory:** `evidence/SF-017-recovery-helper-validation/`.
+- **Status:** PASS — manual recovery-helper execution and the controlled ICMP detection path verified.
+
+### Scope and Limitations
+
+- The helper is manually triggered; it does not start the Windows VM.
+- Reboot-based recovery was not tested. Automatic boot-time recovery is not established.
+- Windows VM autostart remains disabled.
+- Container running state and HTTP 302 do not establish full application readiness.
+- Validation covers only the controlled host-only ICMP scenario; it does not establish broader network detection coverage.
