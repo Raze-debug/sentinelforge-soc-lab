@@ -1,0 +1,43 @@
+SENTINELFORGE — SF-018
+Authentication and Access Validation
+
+Objective
+Validate Windows failed-network-logon event collection and detection through Wazuh.
+
+Test environment
+- Windows 11 test VM
+- Wazuh agent: SF-WIN11-01
+- Wazuh manager: single-node deployment
+- Windows Security event auditing: Logon failures enabled
+
+Test procedure
+1. Created a temporary local test account for the validation.
+2. Confirmed that Windows logon failure auditing was enabled.
+3. Attempted one SMB IPC$ network authentication using an intentionally incorrect password.
+4. Windows generated Security Event ID 4625.
+5. Verified that the Wazuh manager received and generated an alert for the event.
+
+Detection evidence
+- Windows Event ID: 4625
+- Logon type: 3 (Network)
+- Wazuh rule ID: 60122
+- Wazuh severity: 5
+- Alert: Logon Failure - Unknown user or bad password
+- Evidence file: wazuh-4625-alert-sanitized.json
+
+Result
+PASS — The controlled failed network authentication was recorded by Windows and detected by Wazuh.
+
+Scope and limitations
+- This was a single failed authentication attempt against the local SMB service.
+- The test does not demonstrate remote brute-force detection.
+- No password guessing sequence or account-lockout threshold test was performed.
+- No successful unauthorized access was attempted.
+- This validation confirms the Windows-to-Wazuh event collection and alerting path only.
+
+Evidence handling
+The saved JSON alert is retained in this directory.
+Sensitive machine-specific information and credentials are intentionally excluded from this summary.
+
+Project: SentinelForge SOC Lab
+Validation: SF-018

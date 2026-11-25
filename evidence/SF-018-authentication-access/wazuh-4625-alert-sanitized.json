@@ -1,0 +1,83 @@
+{
+  "timestamp": "2026-11-25T18:33:53.307+0000",
+  "rule": {
+    "level": 5,
+    "description": "Logon Failure - Unknown user or bad password",
+    "id": "60122",
+    "mitre": {
+      "id": [
+        "T1531"
+      ],
+      "tactic": [
+        "Impact"
+      ],
+      "technique": [
+        "Account Access Removal"
+      ]
+    },
+    "firedtimes": 1,
+    "mail": false,
+    "groups": [
+      "windows",
+      "windows_security",
+      "authentication_failed"
+    ],
+    "pci_dss": [
+      "10.2.4",
+      "10.2.5"
+    ],
+    "gpg13": [
+      "7.1"
+    ],
+    "gdpr": [
+      "IV_35.7.d",
+      "IV_32.2"
+    ],
+    "hipaa": [
+      "164.312.b"
+    ],
+    "nist_800_53": [
+      "AU.14",
+      "AC.7"
+    ],
+    "tsc": [
+      "CC6.1",
+      "CC6.8",
+      "CC7.2",
+      "CC7.3"
+    ]
+  },
+  "manager": {
+    "name": "SentinelForge-Wazuh-Manager"
+  },
+  "decoder": {
+    "name": "windows_eventchannel"
+  },
+  "data": {
+    "win": {
+      "system": {
+        "providerName": "Microsoft-Windows-Security-Auditing",
+        "providerGuid": "{54849625-5478-4994-a5ba-3e3b0328c30d}",
+        "eventID": "4625",
+        "version": "0",
+        "level": "0",
+        "task": "12544",
+        "opcode": "0",
+        "keywords": "0x8010000000000000",
+        "systemTime": "2026-11-25T18:33:27.0394807Z",
+        "channel": "Security",
+        "severityValue": "AUDIT_FAILURE"
+      },
+      "eventdata": {
+        "status": "0xc000006d",
+        "failureReason": "%%2313",
+        "subStatus": "0xc000006a",
+        "logonType": "3",
+        "logonProcessName": "NtLmSsp",
+        "authenticationPackageName": "NTLM",
+        "keyLength": "0"
+      }
+    }
+  },
+  "location": "EventChannel"
+}
